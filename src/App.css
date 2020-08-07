@@ -1,38 +1,118 @@
-.App {
+
+body {
+  color: white;
+  font-size: 20px; 
+  font-family: helvetica;
+  background-color: darkgreen;
+}
+
+.footer {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  color: white;
+  text-align: center;
+  font-size: 12px; 
+
+}
+
+.table-prepare-end {
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    position: fixed;
+    background: rgba(200,200,200,0.2);  
+}
+
+.table-prepare-end div {
+  display: flex;
+  justify-content: center;
+  align-items: center
+}
+
+.table-prepare-end button {
+  
+  display: flex;
+  justify-content: center;
+  align-items: center
+}
+
+.table-prepare-end p {
+  text-align: center;
+  margin: 100px 0;
+  padding: 100px 0;
+  font-size: 3em; 
+  font-weight: bolder;
+  background-color: rgba(0,24,0,0.75);
+  border-style: solid;
+  border-width: 5px;
+}
+
+.table-ingame .hand {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.player h4 {
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.player .lose {
+  text-decoration: line-through;
+  color: grey;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+button {
+  width: 125px;
+  height: 50px;
+  border-color: darkgreen;
+  border-radius: 10px;
+  background: green;
   color: white;
+  font-size: 15px;
 }
 
-.App-link {
-  color: #61dafb;
+button :hover {
+  background: lightgreen;
+  color: darkgrey;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.deck {
+  height: 150px;
+  width: auto;
+}
+
+
+.hand img {
+  height: 150px;
+  width: auto;
+}
+
+.hand .buttons {
+  display: flex;
+  justify-content: center;
+  align-items: center
+}
+
+.moveUp {
+  animation: goUp 0.5s;
+}
+
+@keyframes goUp {
+  0% { transform: translate(0px, 0px) rotate(0deg); }
+  12% { transform: translate(0px, -12px) rotate(0deg); }
+  25% { transform: translate(0px, -25px) rotate(0deg); }
+  37% { transform: translate(0px, -37px) rotate(0deg); }
+  50% { transform: translate(0px, -50px) rotate(0deg); }
+  62% { transform: translate(0px, -62px) rotate(0deg); }
+  75% { transform: translate(0px, -75px) rotate(0deg); }
+  88% { transform: translate(0px, -88px) rotate(0deg); }
+  100% { transform: translate(0px, -100px) rotate(0deg); }
+}
+
+.other-games {
+  
 }
