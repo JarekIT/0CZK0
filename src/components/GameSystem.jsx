@@ -16,7 +16,7 @@ const GameSystem = ({ players, setPlayers, game, setGame }) => {
 
   useEffect(() => {
     if (game.status === "DEALING") {
-      give2CardsAtBeginingToEachPlayer();
+      deal2CardsToEachPlayerAtTheBeginning();
     }
   }, [game]);
 
@@ -26,7 +26,7 @@ const GameSystem = ({ players, setPlayers, game, setGame }) => {
     }
   }, [bot]);
 
-  // pobiera deck_id do dalszej gry
+  // get deck_id for further play
   const getNewDeckFromAPI = async () => {
     axios
       .get("https://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=2")
@@ -41,11 +41,11 @@ const GameSystem = ({ players, setPlayers, game, setGame }) => {
       });
   };
 
-  // wstrzymuje działanie programu na czas animacji
+  // pauses the program for the duration of the animation
   const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-  // rozdaje kazdemu graczowi dwie karty na początku gry
-  const give2CardsAtBeginingToEachPlayer = async () => {
+  // gives two cards to each player at the start of the game
+  const deal2CardsToEachPlayerAtTheBeginning = async () => {
     let p = 0;
     while (p < players.length) {
       await createHandWith2Cards(p);
@@ -57,8 +57,7 @@ const GameSystem = ({ players, setPlayers, game, setGame }) => {
     setGame(newGame);
   };
 
-  // pobiera dwie karty z Deck API i zapisuje u gracza
-  // -> sprawdza czy są to 2 Asy
+  // gets two cards from the Deck API and saves it to the player
   const createHandWith2Cards = async (p) => {
     axios
       .get(`https://deckofcardsapi.com/api/deck/${game.deck_id}/draw/?count=2`)
@@ -88,7 +87,7 @@ const GameSystem = ({ players, setPlayers, game, setGame }) => {
       });
   };
 
-  // zwraca wartość liczbową pobranej karty
+  // returns the numerical value of the card drawn
   function checkCardValue(card) {
     if (!isNaN(card.value)) {
       return parseInt(card.value);
@@ -108,21 +107,21 @@ const GameSystem = ({ players, setPlayers, game, setGame }) => {
     }
   }
 
-  // sumuje dwie karty podczas początkowego rozdania
+  // sums up two cards during the initial deal and adds them to the player
   const addPointsAtBegining = (points1, points2, p) => {
     const newPlayersPoints = [...players];
     newPlayersPoints[p].score = points1 + points2;
     setPlayers(newPlayersPoints);
   };
 
-  // weryfikuje czy dwie początkowe karty to są ASY
+  // verifies that the two starting cards are Aces
   function check2Aces(cards, p) {
     if (cards[0].value === "ACE" && cards[1].value === "ACE") {
       setWinnerAndCloseGame(p);
     }
   }
 
-  // ustawia zwycięzce i zmienia status gry na KONIEC
+  // sets the winner and changes the game status to END
   const setWinnerAndCloseGame = (playerId) => {
     const newGameWinner = { ...game };
     newGameWinner.winner = playerId;
@@ -130,7 +129,7 @@ const GameSystem = ({ players, setPlayers, game, setGame }) => {
     setGame(newGameWinner);
   };
 
-  // sprawdza zwycięzce po zakończeniu rozgrywki
+  // checks the winner at the end of the game
   const checkWinner = () => {
     let maxScore = 0;
     let winnerPlayerNumber = -1;
@@ -146,7 +145,7 @@ const GameSystem = ({ players, setPlayers, game, setGame }) => {
     setWinnerAndCloseGame(winnerPlayerNumber);
   };
 
-  // sprawdza czy ostatni gracz jest jedynym grającym
+  // checks if the last player is the only one playing
   function checkIfOthersHaveLost() {
     let i = 0;
     while (i < players.length - 1) {
@@ -158,7 +157,7 @@ const GameSystem = ({ players, setPlayers, game, setGame }) => {
     return true;
   }
 
-  // przełącza na następnego gracza
+  // switches to the next player
   const switchToNextPlayer = () => {
     if (playerNumber + 1 < players.length) {
       console.log("Zmiana gracza z ", playerNumber, " na ", playerNumber + 1);
@@ -178,7 +177,7 @@ const GameSystem = ({ players, setPlayers, game, setGame }) => {
     }
   };
 
-  // sprawdza czy przekroczono 21 punktów
+  // checks if 21 points are exceeded
   const checkScore = () => {
     if (game.mode === "SINGLE" && players[0].score > 21) {
       console.log("Przegrałeś z komputerem");
@@ -191,7 +190,7 @@ const GameSystem = ({ players, setPlayers, game, setGame }) => {
     }
   };
 
-  // dodaje punkty graczowi
+  // adds points to the player
   const addPoints = (points) => {
     const newPlayersPoints = [...players];
     newPlayersPoints[playerNumber].score += points;
@@ -199,7 +198,7 @@ const GameSystem = ({ players, setPlayers, game, setGame }) => {
     checkScore();
   };
 
-  // pobiera kartę z Deck API
+  // gets 1 card from the Deck API
   const addOneCard = async () => {
     const newPlayersCards = [...players];
 
@@ -226,6 +225,7 @@ const GameSystem = ({ players, setPlayers, game, setGame }) => {
 
   // // // // // // // // //
 
+  // sets the game to play against the computer
   const switchToBot = () => {
     if (players[0].lose || players[0].score < players[1].score) {
       setWinnerAndCloseGame(1);
@@ -235,6 +235,7 @@ const GameSystem = ({ players, setPlayers, game, setGame }) => {
     setBot(true);
   };
 
+  // automatically draws cards until the game is won or lost
   const keepDrawingCardsByComputer = async () => {
     while (players[0].score >= players[1].score) {
       setAnimation({ moveDeck: true });
@@ -245,6 +246,7 @@ const GameSystem = ({ players, setPlayers, game, setGame }) => {
     chekIfTheComputerWon();
   };
 
+  // checks to see if the computer has won
   const chekIfTheComputerWon = async () => {
     await sleep(1000);
 
