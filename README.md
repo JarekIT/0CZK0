@@ -1,4 +1,4 @@
-# OCZKO
+# 0CZK0
 
 
 ## Menu:
@@ -45,7 +45,11 @@ Ace - 11 points
 
 ## Instalation
 
-In the project directory, you can run:
+In the project directory, install npm packages:
+
+### `npm install`
+
+To start server:
 
 ### `npm start`
 
