@@ -13,7 +13,7 @@ https://oczko-jarekit.netlify.app - LIVE GAME
 
 
 ## Description
-* The game is called "Oczko".
+* The game is called "0CZKO0".
 * The rules are simple: the player must get closer to the score of 21 points.
 * Punctation:
 Cards 2 through 10 have a value equal to that of the card |
