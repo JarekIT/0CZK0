@@ -1,10 +1,10 @@
 import React from "react";
 
-const Score = ({ player }) => {
+const Score = ({ player, view }) => {
   return (
     <h4 className={player.lose ? "lose" : ""}>
-      {player.name} ----- {player.score} punktów
-      {player.lose ? "   -----   odpadł" : ""}
+      {player.name}: {view ? player.score : "XX"} punktów
+      {player.lose ? "   ----->   odpadł" : ""}
     </h4>
   );
 };

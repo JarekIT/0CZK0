@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import "./App.css";
 import GameSystem from "./components/GameSystem";
 import Footer from "./components/Footer";
+import Hand from "./components/Hand";
+import AllScores from "./components/AllScores";
 
 function App() {
   const [players, setPlayers] = useState([]);
@@ -11,6 +13,7 @@ function App() {
     status: "PREPARE",
     winner: null,
     mode: null,
+    difficulty: null,
   });
 
   const player = {
@@ -35,12 +38,12 @@ function App() {
     setPlayers(newPlayers);
 
     const newGameStatus = { ...game };
-    newGameStatus.status = "DEALING";
+    newGameStatus.status = "INGAME";
     newGameStatus.mode = "MULTI";
     setGame(newGameStatus);
   };
 
-  const createOnePlayer = () => {
+  const createOnePlayer = (difficulty) => {
     const newPlayer = { ...player };
     newPlayer.id = 0;
     newPlayer.name = "GRACZ";
@@ -54,8 +57,9 @@ function App() {
     setPlayers(newPlayers);
 
     const newGameStatus = { ...game };
-    newGameStatus.status = "DEALING";
+    newGameStatus.status = "INGAME";
     newGameStatus.mode = "SINGLE";
+    newGameStatus.difficulty = difficulty;
     setGame(newGameStatus);
   };
 
@@ -66,6 +70,7 @@ function App() {
       status: "PREPARE",
       winner: null,
       mode: null,
+      difficulty: null,
     });
   };
 
@@ -76,11 +81,22 @@ function App() {
           <p>Wybierz tryb rozgrywki</p>
 
           <div>
-            <h4>Zagraj w oczko sam na sam z komputerem:</h4>
+            <h4>
+              Zagraj w oczko sam na sam z komputerem
+              <br />
+              EASY: komputer mając 18 punktów pasuje
+              <br />
+              HARD: komputer widzi nasze karty :-)
+            </h4>
           </div>
 
           <div>
-            <button onClick={() => createOnePlayer()}>Gra z botem</button>
+            <button onClick={() => createOnePlayer("EASY")}>
+              EASY: komputer nie oszukuje
+            </button>
+            <button onClick={() => createOnePlayer("HARD")}>
+              HARD: komputer oszukuje
+            </button>
           </div>
 
           <div>
@@ -99,10 +115,13 @@ function App() {
           <br />
 
           <div>
-            <h4>Zagraj w inne gry:</h4>
+            <h4>Zobacz inne projekty:</h4>
           </div>
 
           <div>
+            <a href="https://pet-finder-jarekit.netlify.app">
+              <button>Pet Adoption (React)</button>
+            </a>
             <a href="https://pokemon-fight-jarekit.netlify.app">
               <button>Pokemon Fight (JavaScript)</button>
             </a>
@@ -130,7 +149,15 @@ function App() {
             Zwycięzcą jest: {players[game.winner].name}
             <br />
             Wynik: {players[game.winner].score} punktów
+            <br />
+            <Hand player={players[game.winner]} view={true} />
           </p>
+
+          <p className="scores">
+            Tabela wyników:
+            <AllScores players={players} />
+          </p>
+
           <div>
             <button onClick={() => prepareNewGame()}>
               Rozpocznij grę na nowo

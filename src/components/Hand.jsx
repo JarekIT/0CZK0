@@ -1,7 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import Card from "./Card";
 
-const Hand = ({ player }) => {
+const Hand = ({ player, view }) => {
   return (
     <div className="hand">
       {player
@@ -9,7 +9,7 @@ const Hand = ({ player }) => {
             const cardId = "card-" + index;
             return (
               <>
-                <Card key={cardId} card={card} />
+                <Card key={cardId} card={card} view={view} />
               </>
             );
           })

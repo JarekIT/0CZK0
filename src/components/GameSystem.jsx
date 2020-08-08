@@ -4,7 +4,7 @@ import Score from "./Score";
 import axios from "axios";
 
 const GameSystem = ({ players, setPlayers, game, setGame }) => {
-  const [playerNumber, setPlayerNumber] = useState(0);
+  const [playerNumber, setPlayerNumber] = useState(null);
   const [bot, setBot] = useState(null);
   const [animation, setAnimation] = useState({
     moveUp: false,
@@ -12,17 +12,19 @@ const GameSystem = ({ players, setPlayers, game, setGame }) => {
 
   useEffect(() => {
     getNewDeckFromAPI();
+    setPlayerNumber(0);
   }, []);
 
   useEffect(() => {
-    if (game.status === "DEALING") {
-      deal2CardsToEachPlayerAtTheBeginning();
+    if (game.status === "INGAME" && !bot) {
+      console.log("Biore 2 karty");
+      deal2CardsAtTheBeginning();
     }
-  }, [game]);
+  }, [playerNumber, game]);
 
   useEffect(() => {
     if (bot) {
-      keepDrawingCardsByComputer();
+      get2CardsAndKeepDrawing();
     }
   }, [bot]);
 
@@ -44,17 +46,10 @@ const GameSystem = ({ players, setPlayers, game, setGame }) => {
   // pauses the program for the duration of the animation
   const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-  // gives two cards to each player at the start of the game
-  const deal2CardsToEachPlayerAtTheBeginning = async () => {
-    let p = 0;
-    while (p < players.length) {
-      await createHandWith2Cards(p);
-      await sleep(500);
-      p++;
-    }
-    const newGame = { ...game };
-    newGame.status = "INGAME";
-    setGame(newGame);
+  // gives two cards to each player at the start of the round
+  const deal2CardsAtTheBeginning = async () => {
+    await createHandWith2Cards(playerNumber);
+    await sleep(500);
   };
 
   // gets two cards from the Deck API and saves it to the player
@@ -223,11 +218,11 @@ const GameSystem = ({ players, setPlayers, game, setGame }) => {
     setPlayers(newPlayersCards);
   };
 
-  // // // // // // // // //
+  // // // // // // // // // SINGLE
 
   // sets the game to play against the computer
   const switchToBot = () => {
-    if (players[0].lose || players[0].score < players[1].score) {
+    if (players[0].lose) {
       setWinnerAndCloseGame(1);
     } else {
       setPlayerNumber(1);
@@ -235,21 +230,45 @@ const GameSystem = ({ players, setPlayers, game, setGame }) => {
     setBot(true);
   };
 
+  // takes two cards and waits for them, then starts drawing cards
+  const get2CardsAndKeepDrawing = async () => {
+    await deal2CardsAtTheBeginning();
+    keepDrawingCardsByComputer();
+  };
+
   // automatically draws cards until the game is won or lost
   const keepDrawingCardsByComputer = async () => {
-    while (players[0].score >= players[1].score) {
-      setAnimation({ moveDeck: true });
+    game.difficulty === "EASY"
+      ? await computerPlayEasy()
+      : await computerPlayHard();
+    chekIfTheComputerWon();
+  };
+
+  // EASY: the computer draws cards until it has at least 18 points
+  const computerPlayEasy = async () => {
+    while (players[1].score <= 17) {
       await sleep(500);
       await addOneCard();
     }
+  };
 
-    chekIfTheComputerWon();
+  // HARD: the computer sees the player's points and will draw cards until it has more than the player
+  const computerPlayHard = async () => {
+    if (players[0].score < players[1].score) {
+      await sleep(500);
+      setWinnerAndCloseGame(1);
+    } else {
+      console.log("biore karte");
+      while (players[0].score >= players[1].score) {
+        await sleep(500);
+        await addOneCard();
+      }
+    }
   };
 
   // checks to see if the computer has won
   const chekIfTheComputerWon = async () => {
     await sleep(1000);
-
     players[1].score < 22 && players[0].score < players[1].score
       ? setWinnerAndCloseGame(1)
       : setWinnerAndCloseGame(0);
@@ -263,10 +282,12 @@ const GameSystem = ({ players, setPlayers, game, setGame }) => {
             const scoreId = "score-" + index;
             const handId = "hand-" + index;
 
+            const view = player.id === playerNumber ? true : false;
+
             return (
               <div className="player" key={playerId}>
-                <Score key={scoreId} player={player} />
-                <Hand key={handId} player={player} />
+                <Score key={scoreId} player={player} view={view} />
+                <Hand key={handId} player={player} view={view} />
 
                 {game.status === "INGAME" && playerNumber === player.id ? (
                   <>
@@ -281,11 +302,11 @@ const GameSystem = ({ players, setPlayers, game, setGame }) => {
                       </button>
 
                       <img
-                        className="deck"
+                        // className="deck"
                         src="/images/deck.jpg"
                         alt="stos kart"
                         onAnimationEnd={() => setAnimation({ moveUp: false })}
-                        className={animation.moveUp ? "moveUp" : ""}
+                        className={animation.moveUp ? "deck moveUp" : "deck"}
                       />
 
                       {game.mode === "SINGLE" ? (
