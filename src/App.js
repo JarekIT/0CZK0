@@ -22,6 +22,7 @@ function App() {
     score: 0,
     cards: [],
     lose: false,
+    human: false,
   };
 
   const createMultiPlayers = (numberOfPlayers) => {
@@ -32,6 +33,7 @@ function App() {
       const newPlayer = { ...player };
       newPlayer.name = "Gracz nr: " + i;
       newPlayer.id = i;
+      newPlayer.human = true;
       newPlayers.push(newPlayer);
       i++;
     }
@@ -47,6 +49,7 @@ function App() {
     const newPlayer = { ...player };
     newPlayer.id = 0;
     newPlayer.name = "GRACZ";
+    newPlayer.human = true;
 
     const newBot = { ...player };
     newBot.id = 1;

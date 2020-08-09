@@ -274,6 +274,12 @@ const GameSystem = ({ players, setPlayers, game, setGame }) => {
       : setWinnerAndCloseGame(0);
   };
 
+  function checkActiveHumanPlayerInGame(player) {
+    return (
+      game.status === "INGAME" && playerNumber === player.id && player.human
+    );
+  }
+
   return (
     <div>
       {players
@@ -289,7 +295,7 @@ const GameSystem = ({ players, setPlayers, game, setGame }) => {
                 <Score key={scoreId} player={player} view={view} />
                 <Hand key={handId} player={player} view={view} />
 
-                {game.status === "INGAME" && playerNumber === player.id ? (
+                {checkActiveHumanPlayerInGame(player) ? (
                   <>
                     <div className="hand">
                       <button
