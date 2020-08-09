@@ -18,13 +18,13 @@ const GameSystem = ({ players, setPlayers, game, setGame }) => {
   useEffect(() => {
     if (game.status === "INGAME" && !bot) {
       console.log("Biore 2 karty");
-      deal2CardsAtTheBeginning();
+      draw2CardsAtTheBeginning();
     }
   }, [playerNumber, game]);
 
   useEffect(() => {
     if (bot) {
-      get2CardsAndKeepDrawing();
+      draw2CardsAndKeepDrawingCardsOneByOne();
     }
   }, [bot]);
 
@@ -47,7 +47,7 @@ const GameSystem = ({ players, setPlayers, game, setGame }) => {
   const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
   // gives two cards to each player at the start of the round
-  const deal2CardsAtTheBeginning = async () => {
+  const draw2CardsAtTheBeginning = async () => {
     await createHandWith2Cards(playerNumber);
     await sleep(500);
   };
@@ -231,8 +231,8 @@ const GameSystem = ({ players, setPlayers, game, setGame }) => {
   };
 
   // takes two cards and waits for them, then starts drawing cards
-  const get2CardsAndKeepDrawing = async () => {
-    await deal2CardsAtTheBeginning();
+  const draw2CardsAndKeepDrawingCardsOneByOne = async () => {
+    await draw2CardsAtTheBeginning();
     keepDrawingCardsByComputer();
   };
 
@@ -241,7 +241,7 @@ const GameSystem = ({ players, setPlayers, game, setGame }) => {
     game.difficulty === "EASY"
       ? await computerPlayEasy()
       : await computerPlayHard();
-    chekIfTheComputerWon();
+      checkWhoWon();
   };
 
   // EASY: the computer draws cards until it has at least 18 points
@@ -266,8 +266,8 @@ const GameSystem = ({ players, setPlayers, game, setGame }) => {
     }
   };
 
-  // checks to see if the computer has won
-  const chekIfTheComputerWon = async () => {
+  // checks to see who has won
+  const checkWhoWon = async () => {
     await sleep(1000);
     players[1].score < 22 && players[0].score < players[1].score
       ? setWinnerAndCloseGame(1)
