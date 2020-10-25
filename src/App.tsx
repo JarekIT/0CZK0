@@ -5,19 +5,24 @@ import Footer from "./components/Footer";
 import Hand from "./components/Hand";
 import AllScores from "./components/AllScores";
 
-function App() {
-  const [players, setPlayers] = useState([]);
+import "./types/types.d.ts";
+import { Difficulty, IGame, IPlayer } from "./types/types";
 
-  const [game, setGame] = useState({
-    deck_id: null,
-    status: "PREPARE",
-    winner: null,
-    mode: null,
-    difficulty: null,
-  });
+const initialGame: IGame = {
+  deck_id: null,
+  status: "PREPARE",
+  winner: -1,
+  mode: "NOTCHOSEN",
+  difficulty: "NOTCHOSEN",
+};
 
-  const player = {
-    id: null,
+function App(): JSX.Element {
+  const [players, setPlayers] = useState<IPlayer[]>([]);
+
+  const [game, setGame] = useState<IGame>(initialGame);
+
+  const player: IPlayer = {
+    id: -1,
     name: "",
     score: 0,
     cards: [],
@@ -25,12 +30,14 @@ function App() {
     human: false,
   };
 
-  const createMultiPlayers = (numberOfPlayers) => {
-    const newPlayers = [];
+  const createMultiPlayers: (numberOfPlayers: number) => void = (
+    numberOfPlayers
+  ) => {
+    const newPlayers: IPlayer[] = [];
     let i = 0;
 
     while (i < numberOfPlayers) {
-      const newPlayer = { ...player };
+      const newPlayer: IPlayer = { ...player };
       newPlayer.name = "Gracz nr: " + i;
       newPlayer.id = i;
       newPlayer.human = true;
@@ -39,27 +46,27 @@ function App() {
     }
     setPlayers(newPlayers);
 
-    const newGameStatus = { ...game };
+    const newGameStatus: IGame = { ...game };
     newGameStatus.status = "INGAME";
     newGameStatus.mode = "MULTI";
     setGame(newGameStatus);
   };
 
-  const createOnePlayer = (difficulty) => {
+  const createOnePlayer: (difficulty: Difficulty) => void = (difficulty) => {
     const newPlayer = { ...player };
     newPlayer.id = 0;
     newPlayer.name = "GRACZ";
     newPlayer.human = true;
 
-    const newBot = { ...player };
+    const newBot: IPlayer = { ...player };
     newBot.id = 1;
     newBot.name = "KOMPUTER";
 
-    const newPlayers = [newPlayer, newBot];
+    const newPlayers: IPlayer[] = [newPlayer, newBot];
 
     setPlayers(newPlayers);
 
-    const newGameStatus = { ...game };
+    const newGameStatus: IGame = { ...game };
     newGameStatus.status = "INGAME";
     newGameStatus.mode = "SINGLE";
     newGameStatus.difficulty = difficulty;
@@ -68,13 +75,7 @@ function App() {
 
   const prepareNewGame = () => {
     setPlayers([]);
-    setGame({
-      deck_id: null,
-      status: "PREPARE",
-      winner: null,
-      mode: null,
-      difficulty: null,
-    });
+    setGame({ ...initialGame });
   };
 
   return (

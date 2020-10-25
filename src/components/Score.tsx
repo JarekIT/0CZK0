@@ -1,4 +1,10 @@
 import React from "react";
+import { IPlayer } from "../types/types";
+
+interface ScoreProps {
+  player: IPlayer;
+  view: boolean;
+}
 
 const Score = ({ player, view }) => {
   return (
