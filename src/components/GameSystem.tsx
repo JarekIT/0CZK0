@@ -26,6 +26,8 @@ const GameSystem: React.FC<GameSystemProps> = ({
     moveUp: false,
   });
 
+  const deckUrl: string = "https://deckofcardsapi.com/api/deck";
+
   useEffect(() => {
     getNewDeckFromAPI();
     setPlayerNumber(0);
@@ -47,7 +49,7 @@ const GameSystem: React.FC<GameSystemProps> = ({
   // get deck_id for further play
   const getNewDeckFromAPI: () => Promise<void> = async () => {
     axios
-      .get("https://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=2")
+      .get(`${deckUrl}/new/shuffle/?deck_count=2`)
       .then((res) => {
         console.log(res);
         const newGame: IGame = { ...game };
@@ -74,7 +76,7 @@ const GameSystem: React.FC<GameSystemProps> = ({
     playerNumber
   ) => {
     axios
-      .get(`https://deckofcardsapi.com/api/deck/${game.deck_id}/draw/?count=2`)
+      .get(`${deckUrl}/${game.deck_id}/draw/?count=2`)
       .then((res) => {
         check2Aces(res.data.cards, playerNumber);
 
@@ -225,9 +227,7 @@ const GameSystem: React.FC<GameSystemProps> = ({
 
     await sleep(500);
 
-    await fetch(
-      `https://deckofcardsapi.com/api/deck/${game.deck_id}/draw/?count=1`
-    )
+    await fetch(`${deckUrl}/${game.deck_id}/draw/?count=1`)
       .then((res: Response) => res.json())
       .then((data: any) => {
         const newCard: ICard = data.cards[0];
