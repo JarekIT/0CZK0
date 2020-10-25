@@ -108,14 +108,13 @@ function App(): JSX.Element {
           </div>
 
           <div>
-            <button onClick={() => createMultiPlayers(2)}>2 graczy</button>
-            <button onClick={() => createMultiPlayers(3)}>3 graczy</button>
-            <button onClick={() => createMultiPlayers(4)}>4 graczy</button>
-            <button onClick={() => createMultiPlayers(5)}>5 graczy</button>
-            <button onClick={() => createMultiPlayers(6)}>6 graczy</button>
-            <button onClick={() => createMultiPlayers(7)}>7 graczy</button>
-            <button onClick={() => createMultiPlayers(8)}>8 graczy</button>
+            {[...Array(7)].map((x: any, i: number) => (
+              <button key={i} onClick={() => createMultiPlayers(i + 2)}>
+                {i + 2} graczy
+              </button>
+            ))}
           </div>
+
           <br />
 
           <div>
