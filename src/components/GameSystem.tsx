@@ -4,9 +4,9 @@ import axios from "axios";
 
 import Hand from "./Hand";
 import Score from "./Score";
+import HumanPanel from "./HumanPanel";
 
 import { ICard, IGame, IPlayer } from "../types/types";
-import HumanPanel from "./HumanPanel";
 
 interface GameSystemProps {
   players: IPlayer[];
@@ -310,7 +310,7 @@ const GameSystem: React.FC<GameSystemProps> = ({
   }
 
   return (
-    <div>
+    <div className="table-ingame">
       {players
         ? players.map((player, index) => {
             const playerId = "player-" + index;
