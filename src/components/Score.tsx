@@ -6,7 +6,7 @@ interface ScoreProps {
   view: boolean;
 }
 
-const Score = ({ player, view }) => {
+const Score: React.FC<ScoreProps> = ({ player, view }) => {
   return (
     <h4 className={player.lose ? "lose" : ""}>
       {player.name}: {view ? player.score : "XX"} punktów

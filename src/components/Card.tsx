@@ -3,7 +3,7 @@ import { ICard } from "../types/types";
 
 interface CardProps {
   card: ICard;
-  view: any;
+  view: boolean;
 }
 
 const Card: React.FC<CardProps> = ({ card, view }) => {

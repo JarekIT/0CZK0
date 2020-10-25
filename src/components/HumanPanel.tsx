@@ -10,7 +10,7 @@ interface HumanPanelProps {
   game: IGame;
 }
 
-const HumanPanel = ({
+const HumanPanel: React.FC<HumanPanelProps> = ({
   animation,
   setAnimation,
   addOneCard,
