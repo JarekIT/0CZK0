@@ -6,6 +6,7 @@ import Hand from "./Hand";
 import Score from "./Score";
 
 import { ICard, IGame, IPlayer } from "../types/types";
+import HumanPanel from "./HumanPanel";
 
 interface GameSystemProps {
   players: IPlayer[];
@@ -324,33 +325,14 @@ const GameSystem: React.FC<GameSystemProps> = ({
                 <Hand key={handId} player={player} view={view} />
 
                 {checkActiveHumanPlayerInGame(player) ? (
-                  <div className="hand">
-                    <button
-                      onClick={() => {
-                        setAnimation({ moveUp: true });
-                        addOneCard();
-                      }}
-                    >
-                      Dobierz karte
-                    </button>
-
-                    <img
-                      src="/images/deck.jpg"
-                      alt="stos kart"
-                      onAnimationEnd={() => setAnimation({ moveUp: false })}
-                      className={animation.moveUp ? "deck moveUp" : "deck"}
-                    />
-
-                    <button
-                      onClick={() =>
-                        game.mode === "SINGLE"
-                          ? switchToBot()
-                          : switchToNextPlayer()
-                      }
-                    >
-                      Spasuj
-                    </button>
-                  </div>
+                  <HumanPanel
+                    animation={animation}
+                    setAnimation={setAnimation}
+                    addOneCard={addOneCard}
+                    switchToBot={switchToBot}
+                    switchToNextPlayer={switchToNextPlayer}
+                    game={game}
+                  />
                 ) : null}
               </div>
             );
