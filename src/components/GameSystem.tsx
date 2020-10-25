@@ -324,34 +324,33 @@ const GameSystem: React.FC<GameSystemProps> = ({
                 <Hand key={handId} player={player} view={view} />
 
                 {checkActiveHumanPlayerInGame(player) ? (
-                  <>
-                    <div className="hand">
-                      <button
-                        onClick={() => {
-                          setAnimation({ moveUp: true });
-                          addOneCard();
-                        }}
-                      >
-                        Dobierz karte
-                      </button>
+                  <div className="hand">
+                    <button
+                      onClick={() => {
+                        setAnimation({ moveUp: true });
+                        addOneCard();
+                      }}
+                    >
+                      Dobierz karte
+                    </button>
 
-                      <img
-                        // className="deck"
-                        src="/images/deck.jpg"
-                        alt="stos kart"
-                        onAnimationEnd={() => setAnimation({ moveUp: false })}
-                        className={animation.moveUp ? "deck moveUp" : "deck"}
-                      />
+                    <img
+                      src="/images/deck.jpg"
+                      alt="stos kart"
+                      onAnimationEnd={() => setAnimation({ moveUp: false })}
+                      className={animation.moveUp ? "deck moveUp" : "deck"}
+                    />
 
-                      {game.mode === "SINGLE" ? (
-                        <button onClick={() => switchToBot()}>Spasuj</button>
-                      ) : (
-                        <button onClick={() => switchToNextPlayer()}>
-                          Spasuj
-                        </button>
-                      )}
-                    </div>
-                  </>
+                    <button
+                      onClick={() =>
+                        game.mode === "SINGLE"
+                          ? switchToBot()
+                          : switchToNextPlayer()
+                      }
+                    >
+                      Spasuj
+                    </button>
+                  </div>
                 ) : null}
               </div>
             );
